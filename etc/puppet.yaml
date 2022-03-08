@@ -1,0 +1,9 @@
+classes:
+  xunyou::base:
+  xunyou::ssh:
+#  xunyou::php5fpm:
+#  xunyou::nginx:
+# xunyou::web:
+# xunyou::fail2ban:
+# xunyou::rsyslog:
+# xunyou::rsync:

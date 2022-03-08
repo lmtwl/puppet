@@ -1,0 +1,5 @@
+deb http://archive.xunyouyw.com:20000/ubuntu/ trusty main restricted universe multiverse
+deb http://archive.xunyouyw.com:20000/ubuntu/ trusty-updates main multiverse  restricted  universe
+deb http://archive.xunyouyw.com:20000/ubuntu/ trusty-backports main restricted universe multiverse
+deb http://archive.xunyouyw.com:20000/ubuntu/ trusty-security main restricted universe multiverse
+deb http://archive.xunyouyw.com:20000/ubuntu/ trusty-proposed  main restricted universe multiverse
