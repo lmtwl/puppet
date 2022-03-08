@@ -1,0 +1,5 @@
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/HW-KR
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/HW-JP
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/HW-HK
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/HW-TW
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/HW-SGP

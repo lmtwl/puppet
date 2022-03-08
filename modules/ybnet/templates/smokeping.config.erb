@@ -1,0 +1,355 @@
+*** General ***
+
+imgcache = /var/cache/smokeping/images
+imgurl   = ../smokeping/images
+datadir  = /var/lib/smokeping
+dyndir   = /var/lib/smokeping/__cgi
+piddir   = /var/run/smokeping
+smokemail = /etc/smokeping/smokemail
+tmail    = /etc/smokeping/tmail
+precreateperms = 2775
+
+# Please edit this to suit your installation
+owner    = Joe Random
+contact  = joe@some.place.xyz
+cgiurl   = http://put_here_your_domain/cgi-bin/smokeping.cgi
+mailhost = smtp.mailhost.abc
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+
+*** Alerts ***
+to = |/etc/smokeping/smokeping-config/Alert/mailx_alert.sh
+from = smokealert@company.xy
+
++丢包率大于4%
+type = loss
+pattern = >4%,>4%
+comment = there is 4% packet loss
+
++延迟升高20%
+type = matcher
+pattern = Avgratio(historic=>5,current=>2,comparator=>'>',percentage=>120)
+comment = rtt increased 20%
+
++延迟升高50%
+type = matcher
+pattern = Avgratio(historic=>5,current=>2,comparator=>'>',percentage=>150)
+comment = rtt increased 50%
+
+*** Database ***
+
+step     = 60
+pings    = 50
+
+# consfn mrhb steps total
+
+AVERAGE  0.5   1  5040
+AVERAGE  0.5  12  21600
+    MIN  0.5  12  21600
+    MAX  0.5  12  21600
+AVERAGE  0.5 144   3600
+    MAX  0.5 144   3600
+    MIN  0.5 144   3600
+
+*** Presentation ***
+
+template = /etc/smokeping/basepage.html
+charset  = utf-8
+
++ charts
+
+menu = Charts
+title = The most interesting destinations
+
+++ stddev
+sorter = StdDev(entries=>4)
+title = Top Standard Deviation
+menu = Std Deviation
+format = Standard Deviation %f
+
+++ max
+sorter = Max(entries=>5)
+title = Top Max Roundtrip Time
+menu = by Max
+format = Max Roundtrip Time %f seconds
+
+++ loss
+sorter = Loss(entries=>5)
+title = Top Packet Loss
+menu = Loss
+format = Packets Lost %f
+
+++ median
+sorter = Median(entries=>5)
+title = Top Median Roundtrip Time
+menu = by Median
+format = Median RTT %f seconds
+
++ overview 
+
+width = 600
+height = 50
+range = 48h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 400 Days"   400d
+
+#+ hierarchies
+#++ owner
+#title = Host Owner
+#++ location
+#title = Location
+
+
+*** Probes ***
+
++ FPing
+
+binary = /usr/bin/fping
+
+++ FPingtun
+offset = 0%
+++ fpingdr
+offset = 0%
+++ FPingtun0
+offset = random
+++ FPingtun1
+offset = random
+
+
+<% if has_variable?("ipaddress_eth0") then %>
+++ FPingeth0
+sourceaddress=<%= @ipaddress_eth0 %>
+offset = 3%
+<% end %>
+<% if has_variable?("ipaddress_eth1") then %>
+++ FPingeth1
+sourceaddress=<%= @ipaddress_eth1 %>
+offset = 1%
+<% end %>
+<% if has_variable?("ipaddress_eth2") then %>
+++ FPingeth2
+sourceaddress=<%= @ipaddress_eth2 %>
+offset = 1%
+<% end %>
+<% if has_variable?("ipaddress_eth3") then %>
+++ FPingeth3
+sourceaddress=<%= @ipaddress_eth3 %>
+offset = 2%
+<% end %>
+
+<% if has_variable?("ipaddress_ens160") then %>
+++ FPingens160
+sourceaddress=<%= @ipaddress_ens160 %>
+offset = 3%
+<% end %>
+<% if has_variable?("ipaddress_ens192") then %>
+++ FPingens192
+sourceaddress=<%= @ipaddress_ens192 %>
+offset = 1%
+<% end %>
+<% if has_variable?("ipaddress_ens224") then %>
+++ FPingens224
+sourceaddress=<%= @ipaddress_ens224 %>
+offset = 1%
+<% end %>
+<% if has_variable?("ipaddress_ens256") then %>
+++ FPingens256
+sourceaddress=<%= @ipaddress_ens256 %>
+offset = 2%
+<% end %>
+
+<% if has_variable?("ipaddress_em1") then %>
+++ FPingem1
+sourceaddress=<%= @ipaddress_em1 %>
+offset = 1%
+<% end %>
+<% if has_variable?("ipaddress_em2") then %>
+++ FPingem2
+sourceaddress=<%= @ipaddress_em2 %>
+offset = 1%
+<% end %>
+
+<% if has_variable?("ipaddress_em3") then %>
+++ FPingem3
+sourceaddress=<%= @ipaddress_em3 %>
+offset = 2%
+<% end %>
+
+<% if has_variable?("ipaddress_em4") then %>
+++ FPingem4
+sourceaddress=<%= @ipaddress_em4 %>
+offset = 3%
+<% end %>
+
+<% if has_variable?("ipaddress_enp1s0f0") then %>
+++ FPingenp1s0f0
+sourceaddress=<%= @ipaddress_enp1s0f0 %>
+offset = 3%
+<% end %>
+
++ EchoPing
+binary = /usr/bin/echoping
+offset = random
+udp = yes
+
++Curl
+binary=/usr/bin/curl
+forks=5
+offset=50%
+urlformat=http://download.xunyou.com/xunyou2012/verinfo.txt
+# *** Slaves ***
+# 
+## make sure this is not world-readable!
+## secrets=/etc/smokeping/slave-secrets
+#
+# +slave1
+# display_name=slave_name
+# color=0000ff
+
+*** Targets ***
+
+probe = FPingtun
+
+## You have to edit and uncomment all what you want below this.
+# Please, refer to smokeping_config man page for more info
+# The given adresses aren't real to avoid DoS.
+
+menu = Top
+title = Network Latency Grapher
+remark = Welcome to the SmokePing website of 'A poorly \
+        mantained site running Debian.'
+<% if has_variable?("ipaddress_eth0") then %>
++ eth0
+
+menu = ping from eth0 [<%= @ipaddress_eth0 %>]
+title = ping from eth0 [<%= @ipaddress_eth0 %>]
+probe = FPingeth0
+@include <%= @smkdata %>/eth0.conf
+<% end %>
+
+<% if has_variable?("ipaddress_eth1") then %>
++ eth1
+
+menu = ping from eth1 [<%= @ipaddress_eth1 %>]
+title = ping from eth1 [<%= @ipaddress_eth1 %>]
+probe = FPingeth1
+@include <%= @smkdata %>/eth1.conf
+
+<% end %>
+<% if has_variable?("ipaddress_eth2") then %>
++ eth2
+
+menu = ping from eth2 [<%= @ipaddress_eth2 %>]
+title = ping from eth2 [<%= @ipaddress_eth2 %>]
+probe = FPingeth2
+@include <%= @smkdata %>/eth2.conf
+<% end %>
+<% if has_variable?("ipaddress_eth3") then %>
++ eth3
+
+menu = ping from eth3 [<%= @ipaddress_eth3 %>]
+title = ping from eth3 [<%= @ipaddress_eth3 %>]
+probe = FPingeth3
+@include <%= @smkdata %>/eth3.conf
+<% end %>
+
+<% if has_variable?("ipaddress_ens160") then %>
++ ens160
+
+menu = ping from ens160 [<%= @ipaddress_ens160 %>]
+title = ping from ens160 [<%= @ipaddress_ens160 %>]
+probe = FPingens160
+@include <%= @smkdata %>/eth0.conf
+<% end %>
+
+<% if has_variable?("ipaddress_ens192") then %>
++ ens192
+
+menu = ping from ens192 [<%= @ipaddress_ens192 %>]
+title = ping from ens192 [<%= @ipaddress_ens192 %>]
+probe = FPingens192
+@include <%= @smkdata %>/eth1.conf
+
+<% end %>
+<% if has_variable?("ipaddress_ens224") then %>
++ ens224
+
+menu = ping from ens224 [<%= @ipaddress_ens224 %>]
+title = ping from ens224 [<%= @ipaddress_ens224 %>]
+probe = FPingens224
+@include <%= @smkdata %>/eth2.conf
+<% end %>
+<% if has_variable?("ipaddress_ens256") then %>
++ ens256
+
+menu = ping from ens256 [<%= @ipaddress_ens256 %>]
+title = ping from ens256 [<%= @ipaddress_ens256 %>]
+probe = FPingens256
+@include <%= @smkdata %>/eth3.conf
+<% end %>
+
+#3
+
+<% if has_variable?("ipaddress_em1") then %>
++ em1
+
+menu = ping from em1 [<%= @ipaddress_em1 %>]
+title = ping from em1 [<%= @ipaddress_em1 %>]
+probe = FPingem1
+@include <%= @smkdata %>/em1.conf
+
+<% end %>
+<% if has_variable?("ipaddress_em2") then %>
++ em2
+
+menu = ping from em2 [<%= @ipaddress_em2 %>]
+title = ping from em2 [<%= @ipaddress_em2 %>]
+probe = FPingem2
+@include <%= @smkdata %>/em2.conf
+<% end %>
+<% if has_variable?("ipaddress_em3") then %>
++ em3
+
+menu = ping from em3 [<%= @ipaddress_em3 %>]
+title = ping from em3 [<%= @ipaddress_em3 %>]
+probe = FPingem3
+@include <%= @smkdata %>/em3.conf
+<% end %>
+
+<% if has_variable?("ipaddress_em4") then %>
++ em4
+
+menu = ping from em4 [<%= @ipaddress_em4 %>]
+title = ping from em4 [<%= @ipaddress_em4 %>]
+probe = FPingem4
+@include <%= @smkdata %>/em4.conf
+<% end %>
+
+<% if has_variable?("ipaddress_enp1s0f0") then %>
++ enp1s0f0
+
+menu = ping from enp1s0f0 [<%= @ipaddress_enp1s0f0 %>]
+title = ping from enp1s0f0 [<%= @ipaddress_enp1s0f0 %>]
+probe = FPingenp1s0f0
+@include <%= @smkdata %>/eth0.conf
+<% end %>
+
+
++ defualtroute
+menu = 默认网关ping
+title = 默认网关ping
+probe = FPingtun
+alerts = 丢包率大于4%,延迟升高20%,延迟升高50%
+@include <%= @smkdata %>/dr.conf

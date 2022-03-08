@@ -1,0 +1,7 @@
+<location />
+AuthName "private area."
+   AuthType Basic
+   AuthUserFile /etc/apache2/htpasswd.users
+   Require valid-user
+</location>
+

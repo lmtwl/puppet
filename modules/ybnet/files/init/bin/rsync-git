@@ -1,0 +1,11 @@
+#!/bin/bash
+ip rule list | grep -q "from all to 1.14.95.74 lookup 2" || ip rule add from all to 1.14.95.74 lookup 2 pref 32700
+export RSYNC_PASSWORD=Hryycfl2021
+sleep ${1:-$(($RANDOM%60))}
+basedir=${2:-"/opt/ysnet/init"}
+gitsrc="admin@1.14.95.74::puppet"
+wd="${basedir}/git/"
+
+[ -d $wd ]||mkdir -p $wd
+
+rsync -avz --delete ${gitsrc}/puppet ${wd}/
