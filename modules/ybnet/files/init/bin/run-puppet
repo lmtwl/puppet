@@ -1,0 +1,30 @@
+#!/bin/bash
+#set -x
+sleep ${1:-$(($RANDOM%60))}
+basedir=${2:-"/opt/ysnet/init"}
+repo_code="puppet"
+wd="${basedir}/git"
+gitloc="${basedir}/var"
+
+[ -d $wd ]||mkdir -p $wd
+
+[ -x /opt/ysnet/init/bin/rsync-git ]&&/opt/ysnet/init/bin/rsync-git  ${1:-$(($RANDOM%60))}
+
+
+
+function co () {
+        [ -d  ${wd}/${1} ]||git init ${wd}/${1}
+        cd ${wd}/${1}
+        git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null
+        [ $? -ne 0 ]&&git init ${wd}/${1}
+        git fetch --tags --progress ${gitloc}/${1}.git +refs/heads/*:refs/remotes/origin/*
+        lc=$(git rev-parse refs/tags/test)
+        #lc=$(git rev-parse refs/tags/release)
+#git tag -v release||return 0
+        git clean -f
+        git checkout -f $lc
+}
+
+#co ${repo_code}
+
+[ -d ${wd}/${repo_code}/manifests ]&&puppet apply --config ${wd}/${repo_code}/etc/puppet.conf --modulepath=${wd}/${repo_code}/modules ${wd}/${repo_code}/manifests/site.pp

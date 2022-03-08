@@ -1,0 +1,36 @@
+frr version 6.0.3
+frr defaults traditional
+hostname 10.49.136.5
+log syslog informational
+no ipv6 forwarding
+service integrated-vtysh-config
+!
+<% if has_variable?("ipaddress_socks5") then -%>
+ip router-id <%= @ipaddress_socks5 -%>
+<% else -%>
+ip router-id <%= @ipaddress -%>
+<% end %>
+!
+interface socks5
+ ip ospf network point-to-point
+!
+router ospf
+ redistribute connected route-map socks5
+ network 10.0.0.0/13 area 0
+ network 10.8.0.0/15 area 0
+ network 10.11.0.0/16 area 0
+ network 10.12.0.0/14 area 0
+ network 10.16.0.0/12 area 0
+ network 10.32.0.0/11 area 0
+ network 10.64.0.0/10 area 0
+ network 10.128.0.0/9 area 0
+!
+router ospf6
+!
+route-map socks5 permit 10
+ match interface socks5
+!
+line vty
+!
+bfd
+!

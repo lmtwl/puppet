@@ -1,0 +1,4 @@
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/CN-GAME
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/CT-ALL
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/CU-ALL
+@include /opt/ysnet/init/git/puppet/modules/ybnet/files/smokeping/address/CM-ALL

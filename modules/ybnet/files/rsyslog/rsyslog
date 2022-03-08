@@ -1,0 +1,57 @@
+/var/log/syslog
+{
+        rotate 7
+        daily
+        missingok
+        notifempty
+        delaycompress
+        compress
+        postrotate
+                /usr/lib/rsyslog/rsyslog-rotate
+        endscript
+}
+
+/var/log/mail.info 
+/var/log/mail.warn
+/var/log/mail.err
+/var/log/mail.log
+/var/log/daemon.log
+/var/log/kern.log
+/var/log/auth.log
+/var/log/user.log
+/var/log/lpr.log
+/var/log/cron.log
+/var/log/debug
+/var/log/messages
+{
+        rotate 4
+        weekly
+        missingok
+        notifempty
+        compress
+        delaycompress
+        sharedscripts
+        postrotate
+                /usr/lib/rsyslog/rsyslog-rotate
+        endscript
+}
+
+/var/log/ys/*.log
+{
+        copytruncate
+        rotate 30
+        daily
+        missingok
+        dateext
+        notifempty
+        delaycompress
+        create 664 root utmp
+        compress
+        maxage 31
+        sharedscripts
+        lastaction
+                # RHEL: Use "/sbin/service rsyslog restart"
+                # Debian / Ubuntu: Use "invoke-rc.d rsyslog reload > /dev/null"
+                invoke-rc.d rsyslog reload > /dev/null
+        endscript
+}

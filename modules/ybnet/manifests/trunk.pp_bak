@@ -1,0 +1,116 @@
+class ybnet::trunk {
+  if $node == "2" {
+    # 通用规则
+    firewall { '100 masq rule':
+      ensure => 'present',
+      chain => 'POSTROUTING',
+      table => 'nat',
+      proto => 'all',
+      source => '192.168.254.0/30',
+      destination => '! 192.168.254.0/30',
+      jump => 'MASQUERADE';
+    }
+    if $socks5_installed == "0"{
+      # 接入
+      firewall { '201 pre dnat 53 port':
+        chain => 'PREROUTING',
+        table => 'nat',
+        proto => 'udp',
+        dport => '53',
+        destination => '8.8.8.1/32',
+        jump => 'DNAT',
+        todest => '8.8.8.8:53';
+        '201 out dnat 53 port':
+          chain => 'OUTPUT',
+          table => 'nat',
+          proto => 'udp',
+          dport => '53',
+          destination => '8.8.8.1/32',
+          jump => 'DNAT',
+          todest => '8.8.8.8:53';
+      }
+    }
+  }
+  if $node == "4" {
+    # 通用规则
+    firewall{ '100 masq rule':
+      chain => 'POSTROUTING',
+      table => 'nat',
+      proto => 'all',
+      source => '192.168.254.0/30',
+      destination => '! 192.168.254.0/30',
+      jump => 'MASQUERADE';
+      '201 pre dnat 53 port':
+        chain => 'PREROUTING',
+        table => 'nat',
+        proto => 'udp',
+        dport => '53',
+        destination => '8.8.8.1/32',
+        jump => 'DNAT',
+        todest => '8.8.8.8:53';
+      '201 out dnat 53 port':
+        chain => 'OUTPUT',
+        table => 'nat',
+        proto => 'udp',
+        dport => '53',
+        destination => '8.8.8.1/32',
+        jump => 'DNAT',
+        todest => '8.8.8.8:53';
+    }
+    if $socks5_installed != "0" {
+      # 接入
+      exec { 'add-rule':
+        # 后续优化
+        command => 'bash /opt/ysnet/init/git/puppet/modules/ybnet/files/trunk/add-iptables.sh';
+      }
+    }
+  }
+  if $node == "5" {
+    # 通用规则
+    firewall{ '100 masq rule':
+      chain => 'POSTROUTING',
+      table => 'nat',
+      proto => 'all',
+      source => '192.168.254.0/30',
+      destination => '! 192.168.254.0/30',
+      jump => 'MASQUERADE';
+      '201 pre dnat 53 port':
+        chain => 'PREROUTING',
+        table => 'nat',
+        proto => 'udp',
+        dport => '53',
+        destination => '8.8.8.1/32',
+        jump => 'DNAT',
+        todest => '8.8.8.8:53';
+      '201 out dnat 53 port':
+        chain => 'OUTPUT',
+        table => 'nat',
+        proto => 'udp',
+        dport => '53',
+        destination => '8.8.8.1/32',
+        jump => 'DNAT',
+        todest => '8.8.8.8:53';
+    }
+    if $socks5_installed != "0" {
+      # 接入
+      firewall { '100 mangle set nat mark':
+        ensure => 'present',
+        chain => 'PREROUTING',
+        table => 'mangle',
+        proto => 'all',
+        iniface => 'nat',
+        jump => 'MARK',
+        set_mark => '0x1e/0xffffffff';
+        '999 nat post masq':
+          ensure => 'present',
+          chain => 'POSTROUTING',
+          proto => 'all',
+          jump => 'MASQUERADE';
+      }
+      exec { 'add-rule':
+        # 后续优化
+        command => 'bash /opt/ysnet/init/git/puppet/modules/ybnet/files/trunk/add-iptables_cn.sh';
+      }
+    }
+  }
+}

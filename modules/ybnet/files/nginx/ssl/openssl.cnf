@@ -1,0 +1,28 @@
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = google.com
+DNS.2 = *.google.com
+DNS.3 = facebook.com
+DNS.4 = *.facebook.com
+DNS.5 = *.google.com.tw
+DNS.6 = *.google.com.hk
+DNS.7 = *.google.com.*
+DNS.8 = www.google.fr
+DNS.9 = www.google.ru
+DNS.10 = www.google.co.kr
+DNS.11 = www.google.co.jp
+DNS.12 = kr.actual.battle.net
+DNS.13 = prod-data-energon.infra-ext.activision.com
+DNS.14 = t9-bnet-auth3.prod.demonware.net
+DNS.15 = t9-bnet-loginqueue.prod.demonware.net
+DNS.16 = prod.umbrella.demonware.net
+DNS.17 = prod.uno.demonware.net
+DNS.18 = navyblue-lobby.prod.demonware.net
+DNS.18 = www.google-analytics.com
+DNS.19 = us.battle.net
+DNS.20 = eu.battle.net
+DNS.21 = kr.battle.net
+DNS.22 = *.playbattlegrounds.com
+DNS.23 = *.playbattlegrounds.com.cn

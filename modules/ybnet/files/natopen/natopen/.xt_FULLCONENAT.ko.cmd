@@ -1,0 +1,1 @@
+cmd_/root/natopen/xt_FULLCONENAT.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id  -T ./scripts/module-common.lds -o /root/natopen/xt_FULLCONENAT.ko /root/natopen/xt_FULLCONENAT.o /root/natopen/xt_FULLCONENAT.mod.o;  true

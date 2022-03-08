@@ -1,0 +1,14 @@
+classes:
+  ybnet::base:
+  ybnet::ssh:
+  ybnet::init:
+  ybnet::ufw:
+  ybnet::l2tpns:
+  ybnet::monitor:
+  ybnet::proxy:
+  ybnet::dnsmasq:
+  ybnet::frr:
+  ybnet::cdn:
+  ybnet::trunk:
+  ybnet::smokeping:
+  ybnet::rsyslog:
