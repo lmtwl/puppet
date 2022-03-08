@@ -1,0 +1,6 @@
+network:
+  version: 2
+  bridges:
+    tcpproxy:
+      addresses:
+        - 172.31.255.254/24
