@@ -1,0 +1,38 @@
+server {
+        listen    80;
+        ssi on;
+        ssi_types text/shtml;
+        root /usr/share/nginx/mall.xunyou.com;
+        index index.shtml index.php index.html;
+        server_name mall.xunyou.com;
+
+        #location / {
+        #       try_files $uri $uri/ /index.html;
+        #}
+
+        error_page 500 /500.html;
+        error_page 404 /404.php;
+        error_page 403 http://www.xunyou.com;
+        location ~ /.svn/ {
+         deny all;
+        }
+        location ~ \.php {
+        #       fastcgi_intercept_errors on;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        #       # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+        #
+        #       # With php5-cgi alone:
+                fastcgi_pass 127.0.0.1:9000;
+                # With php5-fpm:
+        #       fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_index index.php;
+                include fastcgi_params;
+        }
+
+        location ~ /xystat{
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass 127.0.0.1:9000;
+                include fastcgi_params;
+        }
+}
+

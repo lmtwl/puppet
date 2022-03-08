@@ -1,0 +1,38 @@
+server {
+        listen 80;
+	listen 443 ssl;
+
+	ssi on;
+	ssi_types text/shtml;
+
+        root /usr/share/nginx/www.xunyou.com;
+        index index.shtml index.html index.php;
+        server_name www.xunyou.com partnerinfo.xunyou.com ;
+	ssl_certificate /etc/nginx/ssl/nginx.crt;
+        ssl_certificate_key /etc/nginx/ssl/nginx.key;
+	#expires 6h;
+
+        error_page 500 /500.html;
+	error_page 403 http://www.xunyou.com;
+        error_page 404 /404.html;
+	location / {
+		expires 20m;
+	}
+location ~ /.svn/ {
+  deny all;
+}
+location ~ \.php {
+  fastcgi_index index.php;
+  fastcgi_pass 127.0.0.1:9000;
+  include fastcgi_params;
+  set $path_info "";
+  set $real_script_name $fastcgi_script_name;
+  if ($fastcgi_script_name ~ "^(.+?\.php)(/.+)$") {
+    set $real_script_name $1;
+    set $path_info $2;
+  }
+  fastcgi_param SCRIPT_FILENAME /usr/share/nginx/www.xunyou.com/$real_script_name;
+  fastcgi_param SCRIPT_NAME $real_script_name;
+  fastcgi_param PATH_INFO $path_info;
+}
+}

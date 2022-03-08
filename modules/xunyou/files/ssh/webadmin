@@ -1,0 +1,4 @@
+User_Alias WEBADMIN = update
+Cmnd_Alias WEBOP=/usr/bin/svn,/bin/rm,/usr/local/bin/rweb.sh,/usr/bin/rsync
+WEBADMIN ALL = (ALL)WEBOP
+liuqin ALL=(ALL)ALL
