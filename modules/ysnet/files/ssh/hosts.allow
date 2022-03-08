@@ -1,0 +1,29 @@
+# /etc/hosts.deny: list of hosts that are _not_ allowed to access the system.
+#                  See the manual pages hosts_access(5) and hosts_options(5).
+#
+# Example:    ALL: some.host.name, .some.domain
+#             ALL EXCEPT in.fingerd: other.host.name, .other.domain
+#
+# If you're going to protect the portmapper use the name "rpcbind" for the
+# daemon name. See rpcbind(8) and rpc.mountd(8) for further information.
+#
+# The PARANOID wildcard matches any host whose name does not match its
+# address.
+#
+# You may wish to enable this to ensure any programs that don't
+# validate looked up hostnames still leave understandable logs. In past
+# versions of Debian this has been the default.
+# ALL: PARANOID
+
+sshd:47.98.209.44
+sshd:115.29.226.83
+sshd:110.191.179.132
+sshd:128.1.133.213
+sshd:183.223.249.150
+sshd:192.168.254.2
+sshd:1.14.95.74
+sshd:139.155.13.125
+sshd:10.0.0.0/8
+sshd:47.101.160.163
+sshd:128.1.133.213
+sshd:117.176.219.83
